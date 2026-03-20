@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>登录 - 煤矿安全风向标</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#1e3a5f',
+                        'deep-blue-light': '#2d5a87',
+                        'safety-orange': '#f97316',
+                        'bg-primary': '#f8fafc',
+                        'text-primary': '#1e293b',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94a3b8',
+                    },
+                    fontFamily: {
+                        'sans': ['Noto Sans SC', 'PingFang SC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', sans-serif; background-color: #f8fafc; }
+        
+        .input-field:focus { outline: none; border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30, 58, 95, 0.1); }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        
+        /* AI光晕 */
+        .ai-glow { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+        
+        /* 专家光晕 */
+        .expert-glow { background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%); box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
+        
+        ::-webkit-scrollbar { width: 0; display: none; }
+    </style>
+</head>
+<body class="bg-bg-primary text-text-primary">
+    <div class="min-h-screen flex flex-col">
+        <!-- 顶部Logo区域 -->
+        <div class="pt-10 pb-6 text-center">
+            <!-- Logo -->
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl ai-glow mb-4">
+                <svg viewBox="0 0 80 80" class="w-10 h-10">
+                    <circle cx="40" cy="40" r="36" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+                    <circle cx="40" cy="40" r="4" fill="white"/>
+                    <g transform="rotate(0, 40, 40)">
+                        <polygon points="40,8 44,35 40,32 36,35" fill="white"/>
+                        <polygon points="40,72 44,45 40,48 36,45" fill="white" opacity="0.5"/>
+                    </g>
+                    <g transform="rotate(90, 40, 40)">
+                        <polygon points="40,12 43,32 40,30 37,32" fill="white" opacity="0.7"/>
+                        <polygon points="40,68 43,48 40,50 37,48" fill="white" opacity="0.4"/>
+                    </g>
+                    <path d="M40 20 L52 26 L52 38 C52 44 46 50 40 52 C34 50 28 44 28 38 L28 26 Z" 
+                          fill="none" stroke="white" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M36 38 L39 41 L45 35" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1 class="text-xl font-bold text-deep-blue">煤矿安全风向标</h1>
+            <p class="text-sm text-text-muted mt-1">煤矿安全风向标 · 专家智库支持</p>
+        </div>
+
+        <!-- 专家库背书 -->
+        <div class="px-6 mb-6 fade-in" style="animation-delay: 0.1s;">
+            <div class="bg-gradient-to-r from-deep-blue/5 to-deep-blue-light/5 rounded-2xl p-4 border border-deep-blue/10">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-deep-blue flex items-center justify-center border-2 border-white">
+                                <i class="fa-solid fa-user-tie text-white text-xs"></i>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-deep-blue-light flex items-center justify-center border-2 border-white">
+                                <i class="fa-solid fa-user text-white text-xs"></i>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-safety-orange flex items-center justify-center border-2 border-white">
+                                <span class="text-white text-xs font-bold">+50</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-text-primary">权威专家智库</p>
+                            <p class="text-xs text-text-muted">中国矿业大学 · 安全科学研究院</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-text-muted text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 登录表单 -->
+        <div class="flex-1 px-6">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 fade-in" style="animation-delay: 0.2s;">
+                <h2 class="text-lg font-bold text-text-primary mb-6">登录账号</h2>
+                
+                <!-- 手机号输入 -->
+                <div class="mb-4">
+                    <label class="block text-sm text-text-secondary mb-2">手机号</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-mobile-screen absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                        <input type="tel" placeholder="请输入手机号" 
+                               class="input-field w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-sm text-text-primary placeholder-text-muted">
+                    </div>
+                </div>
+
+                <!-- 验证码输入 -->
+                <div class="mb-6">
+                    <label class="block text-sm text-text-secondary mb-2">验证码</label>
+                    <div class="flex space-x-3">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-shield-halved absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                            <input type="text" placeholder="请输入验证码" 
+                                   class="input-field w-full bg-slate-50 border border-slate-200 rounded-xl py-3 pl-11 pr-4 text-sm text-text-primary placeholder-text-muted">
+                        </div>
+                        <button id="send-code-btn" class="px-4 py-3 bg-deep-blue text-white text-sm rounded-xl whitespace-nowrap hover:bg-deep-blue-light transition-colors">
+                            获取验证码
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 登录按钮 -->
+                <button onclick="window.location.href='main.html'" 
+                        class="w-full py-3.5 bg-safety-orange hover:bg-orange-500 text-white font-bold rounded-xl shadow-lg shadow-orange-500/20 transition-all">
+                    登录
+                </button>
+
+                <!-- 其他登录方式 -->
+                <div class="mt-6">
+                    <div class="flex items-center mb-4">
+                        <div class="flex-1 h-px bg-slate-200"></div>
+                        <span class="px-4 text-xs text-text-muted">其他登录方式</span>
+                        <div class="flex-1 h-px bg-slate-200"></div>
+                    </div>
+                    <div class="flex justify-center space-x-6">
+                        <button class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center hover:bg-green-500/20 transition-colors">
+                            <i class="fa-brands fa-weixin text-green-500 text-xl"></i>
+                        </button>
+                        <button class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center hover:bg-blue-500/20 transition-colors">
+                            <i class="fa-brands fa-alipay text-blue-500 text-xl"></i>
+                        </button>
+                        <button class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                            <i class="fa-solid fa-building-columns text-text-secondary text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 协议 -->
+            <div class="mt-6 text-center fade-in" style="animation-delay: 0.3s;">
+                <p class="text-xs text-text-muted">
+                    登录即表示同意
+                    <a href="#" class="text-deep-blue">用户协议</a>
+                    和
+                    <a href="#" class="text-deep-blue">隐私政策</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- 专家介绍 -->
+        <div class="px-6 py-6 fade-in" style="animation-delay: 0.4s;">
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
+                <p class="text-xs text-text-muted mb-3 flex items-center">
+                    <i class="fa-solid fa-star text-safety-orange mr-1"></i>
+                    专家解读资源
+                </p>
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-deep-blue/10 flex items-center justify-center">
+                            <i class="fa-solid fa-graduation-cap text-deep-blue"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-text-primary">中国矿业大学</p>
+                            <p class="text-xs text-text-muted">煤矿安全工程学科 · 国家重点学科</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-safety-orange/10 flex items-center justify-center">
+                            <i class="fa-solid fa-flask text-safety-orange"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-text-primary">安全科学研究院</p>
+                            <p class="text-xs text-text-muted">煤矿安全技术与装备研究</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+                            <i class="fa-solid fa-user-tie text-purple-600"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-text-primary">50+ 行业专家</p>
+                            <p class="text-xs text-text-muted">瓦斯治理、通风安全、顶板管理等专业领域</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 发送验证码
+        const sendCodeBtn = document.getElementById('send-code-btn');
+        let countdown = 60;
+        
+        sendCodeBtn.addEventListener('click', function() {
+            if (this.textContent.includes('秒')) return;
+            
+            this.disabled = true;
+            this.textContent = countdown + '秒后重试';
+            this.classList.remove('bg-deep-blue');
+            this.classList.add('bg-slate-300');
+            
+            const timer = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    this.disabled = false;
+                    this.textContent = '获取验证码';
+                    this.classList.remove('bg-slate-300');
+                    this.classList.add('bg-deep-blue');
+                    countdown = 60;
+                } else {
+                    this.textContent = countdown + '秒后重发';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
