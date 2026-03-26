@@ -173,7 +173,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // ========== 调用 Dify API ==========
+        // ========== 调用 Dify API（Streaming 模式）==========
         async function callDifyAPI(query) {
             try {
                 const response = await fetch(DIFY_CONFIG.apiUrl, {
@@ -185,23 +185,54 @@
                     body: JSON.stringify({
                         inputs: {},
                         query: query,
-                        response_mode: 'blocking',
+                        response_mode: 'streaming',  // Agent 类型必须使用 streaming 模式
                         conversation_id: conversationId,
                         user: DIFY_CONFIG.user,
                     })
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('API Error:', response.status, errorText);
+                    throw new Error(`请求失败 (${response.status}): ${errorText}`);
                 }
 
-                const data = await response.json();
-                
-                if (data.conversation_id) {
-                    conversationId = data.conversation_id;
+                // 处理 SSE 流式响应
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let result = { answer: '', conversation_id: '' };
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                if (data.event === 'message' || data.event === 'agent_message') {
+                                    result.answer += data.answer || '';
+                                }
+                                if (data.conversation_id) {
+                                    result.conversation_id = data.conversation_id;
+                                }
+                            } catch (e) {
+                                // 忽略解析错误
+                            }
+                        }
+                    }
                 }
 
-                return data;
+                if (result.conversation_id) {
+                    conversationId = result.conversation_id;
+                }
+
+                return result;
             } catch (error) {
                 console.error('Dify API 调用失败:', error);
                 throw error;
@@ -236,7 +267,16 @@
                 }
             } catch (error) {
                 thinkingMsg.remove();
-                addMessage('网络连接失败，请检查网络后重试。', false);
+                // 显示详细错误信息
+                let errorMsg = '网络连接失败';
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMsg = '无法连接到服务器，可能是网络限制或跨域问题。\n建议：\n1. 使用 VPN 访问\n2. 或联系管理员配置后端代理';
+                } else if (error.message.includes('401')) {
+                    errorMsg = 'API Key 无效，请联系管理员';
+                } else if (error.message.includes('403')) {
+                    errorMsg = '访问被拒绝，请检查 API 权限';
+                }
+                addMessage(errorMsg, false);
             } finally {
                 isLoading = false;
                 sendBtn.disabled = false;
