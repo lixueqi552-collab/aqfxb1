@@ -299,7 +299,6 @@
             chatMessages.innerHTML = '';
             // 重新添加欢迎消息
             addMessage('您好！我是煤矿安全助手，基于煤矿安全规程知识库为您提供专业问答服务。请问有什么可以帮助您的？', false);
-            userInput.focus();
         });
 
         // ========== 页面初始化 ==========
@@ -311,9 +310,8 @@
             if (initialQuery && initialQuery.trim()) {
                 userInput.value = initialQuery;
                 setTimeout(() => sendMessage(), 500);
-            } else {
-                userInput.focus();
             }
+            // 不自动聚焦，等待用户点击输入框
         });
     </script>
 </body>
