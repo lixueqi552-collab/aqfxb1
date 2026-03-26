@@ -280,7 +280,7 @@
             } finally {
                 isLoading = false;
                 sendBtn.disabled = false;
-                userInput.focus();
+                // 不自动聚焦输入框，避免弹出键盘
             }
         }
 
