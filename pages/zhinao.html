@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>智脑 - 煤矿安全风向标</title>
+    <title>煤矿安全助手</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -30,16 +30,6 @@
         html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif; background-color: #f8fafc; }
         ::-webkit-scrollbar { width: 0; display: none; }
         
-        /* 搜索框聚焦效果 */
-        .search-box {
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .search-box:focus-within {
-            box-shadow: 0 4px 20px rgba(30, 58, 95, 0.15);
-            border-color: #1e3a5f;
-        }
-        
         /* 搜索建议动画 */
         .suggestion-item {
             transition: all 0.2s ease;
@@ -47,15 +37,6 @@
         .suggestion-item:hover {
             background-color: #f1f5f9;
             transform: translateX(4px);
-        }
-        
-        /* 标签切换 */
-        .mode-tab {
-            transition: all 0.2s ease;
-        }
-        .mode-tab.active {
-            background-color: #1e3a5f;
-            color: white;
         }
         
         /* 渐变背景 */
@@ -79,135 +60,63 @@
                 <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl ai-glow mb-4">
                     <i class="fa-solid fa-brain text-white text-2xl"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-deep-blue mb-2">煤矿安全风向标</h1>
-                <p class="text-sm text-text-muted">为安全矿长和安全管理部提供专业支持</p>
+                <h1 class="text-2xl font-bold text-deep-blue mb-2">煤矿安全助手</h1>
+                <p class="text-sm text-text-muted">煤矿安全规程知识库智能问答</p>
             </div>
 
-            <!-- 搜索框 -->
-            <div class="search-box max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                <div class="flex items-center p-4">
-                    <i class="fa-solid fa-magnifying-glass text-text-muted text-lg mr-3"></i>
-                    <input type="text" 
-                           id="search-input"
-                           class="flex-1 text-base text-text-primary placeholder-text-muted outline-none bg-transparent"
-                           placeholder="输入问题，如：2026年瓦斯抽采合规标准有哪些变化？">
-                    <button class="ml-3 px-4 py-2 bg-deep-blue hover:bg-deep-blue-light text-white text-sm font-medium rounded-xl transition-colors" id="search-btn">
-                        搜索
-                    </button>
-                </div>
-            </div>
-
-            <!-- 快捷提示 -->
-            <div class="max-w-2xl mx-auto mt-4 flex items-center justify-center space-x-4 text-xs text-text-muted">
-                <span><i class="fa-solid fa-keyboard mr-1"></i>Enter 搜索</span>
-                <span><i class="fa-solid fa-microphone mr-1"></i>语音输入</span>
-                <span><i class="fa-solid fa-history mr-1"></i>历史记录</span>
+            <!-- 入口按钮 -->
+            <div class="max-w-md mx-auto">
+                <button id="enter-btn" class="w-full ai-glow text-white text-lg font-medium py-4 px-6 rounded-2xl flex items-center justify-center space-x-3 hover:shadow-lg hover:scale-[1.02] transition-all duration-200">
+                    <i class="fa-solid fa-comments text-xl"></i>
+                    <span>开始智能问答</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <p class="text-center text-xs text-text-muted mt-3">点击进入AI助手，随时咨询煤矿安全问题</p>
             </div>
         </div>
 
         <!-- 搜索建议区域 -->
         <div class="flex-1 px-6 py-6 overflow-y-auto">
             <!-- 热门问题 -->
-            <div class="max-w-2xl mx-auto mb-8">
+            <div class="max-w-2xl mx-auto">
                 <h3 class="text-sm font-bold text-text-primary mb-4 flex items-center">
                     <i class="fa-solid fa-fire text-safety-orange mr-2"></i>热门问题
                 </h3>
                 <div class="grid grid-cols-1 gap-3">
-                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('2026年瓦斯抽采合规标准有哪些变化？')">
+                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿安全规程对瓦斯管理有哪些规定？')">
                         <div class="flex items-center space-x-3">
                             <span class="w-6 h-6 rounded-full bg-safety-orange/10 text-safety-orange text-xs flex items-center justify-center font-bold">1</span>
-                            <span class="text-sm text-text-secondary">2026年瓦斯抽采合规标准有哪些变化？</span>
+                            <span class="text-sm text-text-secondary">煤矿安全规程对瓦斯管理有哪些规定？</span>
                         </div>
                         <span class="text-xs text-text-muted"><i class="fa-solid fa-arrow-trend-up mr-1"></i>热门</span>
                     </div>
-                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿安全生产标准化考核要点是什么？')">
+                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('井下作业人员安全培训要求是什么？')">
                         <div class="flex items-center space-x-3">
                             <span class="w-6 h-6 rounded-full bg-deep-blue/10 text-deep-blue text-xs flex items-center justify-center font-bold">2</span>
-                            <span class="text-sm text-text-secondary">煤矿安全生产标准化考核要点是什么？</span>
+                            <span class="text-sm text-text-secondary">井下作业人员安全培训要求是什么？</span>
                         </div>
                         <i class="fa-solid fa-chevron-right text-text-muted text-xs"></i>
                     </div>
-                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('井下人员定位系统最新技术要求')">
+                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿水害防治的主要措施有哪些？')">
                         <div class="flex items-center space-x-3">
                             <span class="w-6 h-6 rounded-full bg-deep-blue/10 text-deep-blue text-xs flex items-center justify-center font-bold">3</span>
-                            <span class="text-sm text-text-secondary">井下人员定位系统最新技术要求</span>
+                            <span class="text-sm text-text-secondary">煤矿水害防治的主要措施有哪些？</span>
                         </div>
                         <i class="fa-solid fa-chevron-right text-text-muted text-xs"></i>
                     </div>
-                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿智能化改造补贴政策汇总')">
+                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿通风系统安全检查要点')">
                         <div class="flex items-center space-x-3">
                             <span class="w-6 h-6 rounded-full bg-deep-blue/10 text-deep-blue text-xs flex items-center justify-center font-bold">4</span>
-                            <span class="text-sm text-text-secondary">煤矿智能化改造补贴政策汇总</span>
+                            <span class="text-sm text-text-secondary">煤矿通风系统安全检查要点</span>
                         </div>
                         <i class="fa-solid fa-chevron-right text-text-muted text-xs"></i>
                     </div>
-                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('如何建立双重预防机制？')">
+                    <div class="suggestion-item flex items-center justify-between p-4 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿安全监控系统运行管理规定')">
                         <div class="flex items-center space-x-3">
                             <span class="w-6 h-6 rounded-full bg-deep-blue/10 text-deep-blue text-xs flex items-center justify-center font-bold">5</span>
-                            <span class="text-sm text-text-secondary">如何建立双重预防机制？</span>
+                            <span class="text-sm text-text-secondary">煤矿安全监控系统运行管理规定</span>
                         </div>
                         <i class="fa-solid fa-chevron-right text-text-muted text-xs"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 搜索历史 -->
-            <div class="max-w-2xl mx-auto">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-sm font-bold text-text-primary flex items-center">
-                        <i class="fa-solid fa-clock-rotate-left text-deep-blue mr-2"></i>搜索历史
-                    </h3>
-                    <button class="text-xs text-text-muted hover:text-deep-blue transition-colors">清空历史</button>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="suggestion-item p-3 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿通风系统安全管理规定')">
-                        <p class="text-sm text-text-secondary truncate">煤矿通风系统安全管理规定</p>
-                        <p class="text-xs text-text-muted mt-1">3天前</p>
-                    </div>
-                    <div class="suggestion-item p-3 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('瓦斯抽采达标评判细则')">
-                        <p class="text-sm text-text-secondary truncate">瓦斯抽采达标评判细则</p>
-                        <p class="text-xs text-text-muted mt-1">3天前</p>
-                    </div>
-                    <div class="suggestion-item p-3 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('煤矿安全规程修订条款')">
-                        <p class="text-sm text-text-secondary truncate">煤矿安全规程修订条款</p>
-                        <p class="text-xs text-text-muted mt-1">5天前</p>
-                    </div>
-                    <div class="suggestion-item p-3 bg-white rounded-xl border border-slate-100 cursor-pointer" onclick="startSearch('顶板事故预防措施')">
-                        <p class="text-sm text-text-secondary truncate">顶板事故预防措施</p>
-                        <p class="text-xs text-text-muted mt-1">1周前</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 功能入口 -->
-            <div class="max-w-2xl mx-auto mt-8">
-                <h3 class="text-sm font-bold text-text-primary mb-4 flex items-center">
-                    <i class="fa-solid fa-grid-2 text-deep-blue mr-2"></i>快捷功能
-                </h3>
-                <div class="grid grid-cols-4 gap-4">
-                    <div class="text-center cursor-pointer" onclick="startSearch('本周安全检查重点')">
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-2">
-                            <i class="fa-solid fa-clipboard-check text-deep-blue"></i>
-                        </div>
-                        <span class="text-xs text-text-secondary">检查要点</span>
-                    </div>
-                    <div class="text-center cursor-pointer" onclick="startSearch('最新政策法规')">
-                        <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center mx-auto mb-2">
-                            <i class="fa-solid fa-gavel text-purple-500"></i>
-                        </div>
-                        <span class="text-xs text-text-secondary">政策法规</span>
-                    </div>
-                    <div class="text-center cursor-pointer" onclick="startSearch('事故案例分析')">
-                        <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center mx-auto mb-2">
-                            <i class="fa-solid fa-triangle-exclamation text-red-500"></i>
-                        </div>
-                        <span class="text-xs text-text-secondary">事故案例</span>
-                    </div>
-                    <div class="text-center cursor-pointer" onclick="startSearch('培训材料')">
-                        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mx-auto mb-2">
-                            <i class="fa-solid fa-graduation-cap text-emerald-500"></i>
-                        </div>
-                        <span class="text-xs text-text-secondary">培训资料</span>
                     </div>
                 </div>
             </div>
@@ -215,32 +124,19 @@
     </div>
 
     <script>
-        // 搜索模式切换
-        const modeTabs = document.querySelectorAll('.mode-tab');
-        modeTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                modeTabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-            });
+        // ========== Dify 入口配置 ==========
+        const DIFY_URL = 'search-result.html';
+
+        // ========== 入口按钮 ==========
+        document.getElementById('enter-btn').addEventListener('click', function() {
+            window.location.href = DIFY_URL;
         });
 
-        // 搜索功能
-        const searchInput = document.getElementById('search-input');
-        const searchBtn = document.getElementById('search-btn');
-
+        // ========== 热门问题点击（直接进入助手）==========
         function startSearch(query) {
-            if (query) {
-                searchInput.value = query;
-            }
-            if (searchInput.value.trim()) {
-                window.location.href = 'search-result.html?q=' + encodeURIComponent(searchInput.value);
-            }
+            // 直接跳转到 Dify 助手页面，带上问题参数
+            window.location.href = DIFY_URL + '?q=' + encodeURIComponent(query);
         }
-
-        searchBtn.addEventListener('click', () => startSearch());
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') startSearch();
-        });
     </script>
 </body>
 </html>
