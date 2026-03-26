@@ -30,44 +30,28 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif; background-color: #f8fafc; }
-        ::-webkit-scrollbar { width: 0; display: none; }
-        /* 毛玻璃效果 */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
         .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        /* AI光晕 */
         .ai-glow { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.3); }
-        /* 问题提示条 */
-        .query-hint {
-            position: fixed;
-            top: 56px;
-            left: 0;
-            right: 0;
-            z-index: 40;
-            transition: transform 0.3s ease;
-        }
-        .query-hint.hidden-hint {
-            transform: translateY(-100%);
-        }
-        /* iframe容器 */
-        .iframe-container {
-            position: fixed;
-            top: 56px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            transition: top 0.3s ease;
-        }
-        .iframe-container.with-hint {
-            top: 112px;
-        }
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        
+        /* 打字动画 */
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        .typing-cursor::after { content: '▋'; animation: blink 1s infinite; color: #1e3a5f; margin-left: 2px; }
+        
+        /* 消息动画 */
+        .message-enter { animation: fadeInUp 0.3s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 思考动画 */
+        .thinking-dots span { animation: thinking 1.4s infinite; }
+        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes thinking { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
     </style>
 </head>
 <body class="bg-bg-primary text-text-primary">
-    <!-- 顶部导航栏（保留统一风格） -->
+    <!-- 顶部导航栏 -->
     <header class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-slate-200/50" style="height: 56px;">
         <div class="flex items-center h-full px-4 space-x-3">
             <button onclick="history.back()" class="text-text-secondary hover:text-deep-blue transition-colors">
@@ -85,95 +69,212 @@
         </div>
     </header>
 
-    <!-- 问题提示条 -->
-    <div class="query-hint glass-effect border-b border-slate-200/50 hidden" id="query-hint">
-        <div class="flex items-center px-4 py-3 space-x-3">
-            <div class="flex-1 flex items-center space-x-2 min-w-0">
-                <span class="text-xs text-text-muted flex-shrink-0">待提问：</span>
-                <p class="text-sm text-text-primary truncate" id="query-text"></p>
+    <!-- 聊天区域 -->
+    <main id="chat-container" class="pt-16 pb-24 px-4 overflow-y-auto" style="height: 100vh;">
+        <div id="chat-messages" class="max-w-2xl mx-auto space-y-4">
+            <!-- 欢迎消息 -->
+            <div class="flex items-start space-x-3 message-enter">
+                <div class="w-8 h-8 rounded-xl ai-glow flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-robot text-white text-sm"></i>
+                </div>
+                <div class="flex-1 bg-white border border-slate-100 rounded-2xl rounded-tl-none p-4 shadow-sm">
+                    <p class="text-sm text-text-secondary leading-relaxed">
+                        您好！我是煤矿安全助手，基于煤矿安全规程知识库为您提供专业问答服务。请问有什么可以帮助您的？
+                    </p>
+                </div>
             </div>
-            <button class="flex-shrink-0 px-3 py-1.5 bg-deep-blue text-white text-xs rounded-lg hover:bg-deep-blue-light transition-colors" id="copy-query-btn">
-                <i class="fa-solid fa-copy mr-1"></i>复制
-            </button>
-            <button class="flex-shrink-0 w-7 h-7 flex items-center justify-center text-text-muted hover:text-text-primary" id="close-hint-btn">
-                <i class="fa-solid fa-xmark"></i>
+        </div>
+    </main>
+
+    <!-- 底部输入框 -->
+    <div id="input-bar" class="fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-200/50 p-4">
+        <div class="max-w-2xl mx-auto flex items-center space-x-3">
+            <input type="text" 
+                   id="user-input" 
+                   placeholder="输入您的安全问题..." 
+                   class="flex-1 bg-slate-100 rounded-xl py-3 px-4 text-sm text-text-primary placeholder-text-muted outline-none focus:ring-2 focus:ring-deep-blue/20 transition-all"
+                   autocomplete="off">
+            <button id="send-btn" class="w-12 h-12 ai-glow rounded-xl flex items-center justify-center hover:shadow-lg transition-all disabled:opacity-50">
+                <i class="fa-solid fa-paper-plane text-white"></i>
             </button>
         </div>
     </div>
 
-    <!-- Dify 助手嵌入区域 -->
-    <div class="iframe-container">
-        <iframe 
-            id="dify-chatbot"
-            src=""
-            allow="microphone">
-        </iframe>
-    </div>
-
     <script>
-        // ========== Dify 嵌入配置 ==========
+        // ========== Dify API 配置 ==========
         const DIFY_CONFIG = {
-            baseUrl: 'https://udify.app/chat/shTiWXqHhZuHqPKJ',
+            apiUrl: 'https://api.dify.ai/v1/chat-messages',
+            apiKey: 'app-nBaPXgRO14kPcWdD96IFk8dU',
+            user: 'user-' + Math.random().toString(36).substr(2, 9),
         };
 
-        // ========== 初始化 ==========
-        function initDifyChatbot() {
-            const iframe = document.getElementById('dify-chatbot');
-            const queryHint = document.getElementById('query-hint');
-            const queryText = document.getElementById('query-text');
-            const iframeContainer = iframe.parentElement;
+        // ========== 状态管理 ==========
+        let conversationId = '';
+        let isLoading = false;
+
+        // ========== DOM 元素 ==========
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const newChatBtn = document.getElementById('new-chat-btn');
+
+        // ========== 添加消息 ==========
+        function addMessage(content, isUser = false, isThinking = false) {
+            const messageDiv = document.createElement('div');
             
-            // 获取 URL 参数中的问题
-            const urlParams = new URLSearchParams(window.location.search);
-            const query = urlParams.get('q');
+            if (isUser) {
+                // 用户消息靠右：气泡 + 头像
+                messageDiv.className = 'flex items-start space-x-3 message-enter justify-end';
+                messageDiv.innerHTML = `
+                    <div class="bg-deep-blue rounded-2xl rounded-tr-none p-4 max-w-[75%]">
+                        <p class="text-sm text-white whitespace-pre-wrap break-words">${escapeHtml(content)}</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-deep-blue flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-user text-white text-sm"></i>
+                    </div>
+                `;
+            } else {
+                // AI 消息靠左：头像 + 气泡
+                messageDiv.className = 'flex items-start space-x-3 message-enter';
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 rounded-xl ai-glow flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-2xl rounded-tl-none p-4 shadow-sm flex-1 max-w-[85%]">
+                        <p class="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap break-words ${isThinking ? 'thinking-dots' : ''}">${isThinking ? '<span>.</span><span>.</span><span>.</span>' : formatAnswer(content)}</p>
+                    </div>
+                `;
+            }
             
-            // 加载 Dify
-            iframe.src = DIFY_CONFIG.baseUrl;
-            
-            // 如果有问题，显示提示条
-            if (query && query.trim()) {
-                queryText.textContent = query;
-                queryHint.classList.remove('hidden');
-                iframeContainer.classList.add('with-hint');
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            return messageDiv;
+        }
+
+        // ========== 格式化答案 ==========
+        function formatAnswer(text) {
+            if (!text) return '';
+            return escapeHtml(text)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/• /g, '• ');
+        }
+
+        // ========== HTML 转义 ==========
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========== 滚动到底部 ==========
+        function scrollToBottom() {
+            const container = document.getElementById('chat-container');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // ========== 调用 Dify API ==========
+        async function callDifyAPI(query) {
+            try {
+                const response = await fetch(DIFY_CONFIG.apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${DIFY_CONFIG.apiKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        inputs: {},
+                        query: query,
+                        response_mode: 'blocking',
+                        conversation_id: conversationId,
+                        user: DIFY_CONFIG.user,
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.conversation_id) {
+                    conversationId = data.conversation_id;
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Dify API 调用失败:', error);
+                throw error;
             }
         }
 
-        // ========== 复制问题 ==========
-        document.getElementById('copy-query-btn').addEventListener('click', function() {
-            const queryText = document.getElementById('query-text').textContent;
-            navigator.clipboard.writeText(queryText).then(() => {
-                this.innerHTML = '<i class="fa-solid fa-check mr-1"></i>已复制';
-                setTimeout(() => {
-                    this.innerHTML = '<i class="fa-solid fa-copy mr-1"></i>复制';
-                }, 2000);
-            });
+        // ========== 发送消息 ==========
+        async function sendMessage() {
+            const query = userInput.value.trim();
+            if (!query || isLoading) return;
+
+            // 添加用户消息
+            addMessage(query, true);
+            userInput.value = '';
+            
+            // 显示思考中
+            isLoading = true;
+            sendBtn.disabled = true;
+            const thinkingMsg = addMessage('', false, true);
+
+            try {
+                const result = await callDifyAPI(query);
+                
+                // 移除思考中消息
+                thinkingMsg.remove();
+                
+                // 添加 AI 回复
+                if (result.answer) {
+                    addMessage(result.answer, false);
+                } else {
+                    addMessage('抱歉，我暂时无法回答这个问题，请稍后再试。', false);
+                }
+            } catch (error) {
+                thinkingMsg.remove();
+                addMessage('网络连接失败，请检查网络后重试。', false);
+            } finally {
+                isLoading = false;
+                sendBtn.disabled = false;
+                userInput.focus();
+            }
+        }
+
+        // ========== 事件监听 ==========
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
 
-        // ========== 关闭提示条 ==========
-        document.getElementById('close-hint-btn').addEventListener('click', function() {
-            const queryHint = document.getElementById('query-hint');
-            const iframeContainer = document.querySelector('.iframe-container');
-            queryHint.classList.add('hidden-hint');
-            setTimeout(() => {
-                queryHint.classList.add('hidden');
-            }, 300);
-            iframeContainer.classList.remove('with-hint');
+        // ========== 新对话 ==========
+        newChatBtn.addEventListener('click', () => {
+            conversationId = '';
+            chatMessages.innerHTML = '';
+            // 重新添加欢迎消息
+            addMessage('您好！我是煤矿安全助手，基于煤矿安全规程知识库为您提供专业问答服务。请问有什么可以帮助您的？', false);
+            userInput.focus();
         });
 
-        // ========== 新对话按钮 ==========
-        document.getElementById('new-chat-btn').addEventListener('click', function() {
-            const iframe = document.getElementById('dify-chatbot');
-            // 重新加载 iframe 以开始新对话
-            iframe.src = DIFY_CONFIG.baseUrl;
-            // 隐藏问题提示条
-            const queryHint = document.getElementById('query-hint');
-            const iframeContainer = document.querySelector('.iframe-container');
-            queryHint.classList.add('hidden');
-            iframeContainer.classList.remove('with-hint');
+        // ========== 页面初始化 ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查 URL 参数是否有初始问题
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialQuery = urlParams.get('q');
+            
+            if (initialQuery && initialQuery.trim()) {
+                userInput.value = initialQuery;
+                setTimeout(() => sendMessage(), 500);
+            } else {
+                userInput.focus();
+            }
         });
-
-        // ========== 页面加载 ==========
-        document.addEventListener('DOMContentLoaded', initDifyChatbot);
     </script>
 </body>
 </html>
