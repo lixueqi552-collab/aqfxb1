@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>警示通报详情 - 煤矿安全风向标</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#1e3a5f',
+                        'safety-orange': '#f97316',
+                        'alert-red': '#dc2626',
+                        'bg-primary': '#f8fafc',
+                        'text-primary': '#1e293b',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94a3b8',
+                    },
+                    fontFamily: { 'sans': ['Noto Sans SC', 'PingFang SC', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif; background-color: #f8fafc; }
+        .glass-effect { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .ai-glow { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); box-shadow: 0 0 16px rgba(59, 130, 246, 0.4); }
+        .expert-glow { background: linear-gradient(135deg, #f97316 0%, #f59e0b 100%); box-shadow: 0 0 16px rgba(249, 115, 22, 0.4); }
+        .ai-comment { background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%); border: 1px solid rgba(59, 130, 246, 0.15); }
+        .expert-comment { background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(245, 158, 11, 0.06) 100%); border: 1px solid rgba(249, 115, 22, 0.15); }
+        ::-webkit-scrollbar { width: 0; display: none; }
+        .action-btn { transition: all 0.2s ease; }
+        .action-btn:active { transform: scale(0.9); }
+        .source-link { transition: all 0.2s ease; }
+        .source-link:hover { background-color: #f1f5f9; transform: translateX(2px); }
+    </style>
+</head>
+<body class="bg-bg-primary text-text-primary">
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 z-50 glass-effect border-b border-slate-200/50">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button onclick="history.back()" class="flex items-center space-x-2 text-text-secondary hover:text-deep-blue transition-colors">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="text-sm">返回</span>
+            </button>
+            <div class="flex items-center space-x-2">
+                <span class="px-2 py-1 bg-deep-blue/10 text-deep-blue text-xs rounded-full">
+                    <i class="fa-solid fa-robot mr-1"></i>AI聚合
+                </span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button class="action-btn w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors" id="bookmark-btn">
+                    <i class="fa-regular fa-bookmark text-sm text-text-secondary"></i>
+                </button>
+                <button class="action-btn w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                    <i class="fa-solid fa-share-nodes text-sm text-text-secondary"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 内容区域 -->
+    <main class="px-4 py-4 pb-24 overflow-y-auto">
+        <!-- 紧急标识 -->
+        <div class="flex items-center space-x-2 mb-3">
+            <span class="px-3 py-1 bg-alert-red text-white text-xs rounded-full font-bold">
+                <i class="fa-solid fa-exclamation-triangle mr-1"></i>警示通报
+            </span>
+            <span class="text-xs text-text-muted">2026年3月第12周 · AI聚合</span>
+        </div>
+
+        <!-- 标题 -->
+        <h1 class="text-xl font-bold mb-3 leading-tight text-text-primary">山西某煤矿发生瓦斯超限事故 安全监察局紧急通报</h1>
+
+        <!-- 元信息 -->
+        <div class="flex items-center space-x-4 text-xs text-text-muted mb-4 pb-4 border-b border-slate-200">
+            <span><i class="fa-regular fa-clock mr-1"></i>2026-03-19 10:30</span>
+            <span><i class="fa-solid fa-eye mr-1"></i>2,341 阅读</span>
+        </div>
+
+        <!-- AI智能摘要 -->
+        <div class="ai-comment rounded-2xl p-4 mb-4">
+            <div class="flex items-center space-x-2 mb-3">
+                <div class="w-8 h-8 rounded-xl ai-glow flex items-center justify-center">
+                    <i class="fa-solid fa-robot text-white text-sm"></i>
+                </div>
+                <div>
+                    <span class="text-deep-blue font-bold text-sm">煤矿安全风向标 · 智能摘要</span>
+                    <p class="text-xs text-text-muted">基于多来源聚合分析</p>
+                </div>
+            </div>
+            <div class="space-y-2 text-sm text-text-secondary">
+                <div class="flex items-start space-x-2">
+                    <span class="w-5 h-5 rounded-full bg-deep-blue/10 flex items-center justify-center text-deep-blue text-xs flex-shrink-0 mt-0.5 font-bold">1</span>
+                    <p><strong class="text-text-primary">事故概况：</strong>山西某煤矿3月18日发生瓦斯超限事故，超限浓度达2.5%，持续时间12分钟</p>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="w-5 h-5 rounded-full bg-deep-blue/10 flex items-center justify-center text-deep-blue text-xs flex-shrink-0 mt-0.5 font-bold">2</span>
+                    <p><strong class="text-text-primary">直接影响：</strong>全省煤矿立即启动瓦斯治理专项检查，影响产能约15%</p>
+                </div>
+                <div class="flex items-start space-x-2">
+                    <span class="w-5 h-5 rounded-full bg-deep-blue/10 flex items-center justify-center text-deep-blue text-xs flex-shrink-0 mt-0.5 font-bold">3</span>
+                    <p><strong class="text-text-primary">关键行动：</strong>建议3日内完成通风系统排查，7日内提交自查报告</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 专家权威解读 -->
+        <div class="expert-comment rounded-2xl p-4 mb-6">
+            <div class="flex items-center space-x-2 mb-3">
+                <div class="w-10 h-10 rounded-xl bg-deep-blue flex items-center justify-center">
+                    <i class="fa-solid fa-user-tie text-white"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-safety-orange font-bold text-sm">王建国 教授</span>
+                        <span class="px-2 py-0.5 bg-safety-orange/10 text-safety-orange text-xs rounded">专家解读</span>
+                    </div>
+                    <p class="text-xs text-text-muted">中国矿业大学 · 瓦斯灾害防治研究所所长</p>
+                </div>
+            </div>
+            <div class="text-sm text-text-secondary leading-relaxed space-y-3">
+                <p><strong class="text-text-primary">【事故分析】</strong></p>
+                <p>该事故暴露出局部通风管理的三个薄弱环节：</p>
+                <ol class="list-decimal list-inside space-y-1 ml-2">
+                    <li>局部通风设备可靠性不足，备用风机未能及时切换</li>
+                    <li>瓦斯监测响应机制滞后，未能第一时间发现异常</li>
+                    <li>现场应急处置能力有待提升</li>
+                </ol>
+                <p><strong class="text-text-primary">【整改建议】</strong></p>
+                <p>建议从"双风机双电源"可靠性、瓦斯监测响应机制、应急演练实效性三方面进行系统性整改。</p>
+            </div>
+            <div class="mt-3 pt-3 border-t border-safety-orange/20 flex items-center space-x-4">
+                <button class="text-xs text-text-muted"><i class="fa-regular fa-thumbs-up mr-1"></i>128 有帮助</button>
+                <button class="text-xs text-deep-blue"><i class="fa-solid fa-comments mr-1"></i>咨询专家</button>
+            </div>
+        </div>
+
+        <!-- ========== 来源聚合 ========== -->
+        <div class="bg-white rounded-2xl p-4 mb-4 border border-slate-100 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-bold text-sm text-text-primary flex items-center">
+                    <i class="fa-solid fa-layer-group text-deep-blue mr-2"></i>来源聚合
+                </h3>
+                <span class="text-xs text-text-muted">共3个来源</span>
+            </div>
+            <div class="space-y-2">
+                <a href="https://www.chinamine-safety.gov.cn/" target="_blank" class="flex items-center justify-between p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center">
+                            <i class="fa-solid fa-landmark text-alert-red text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-text-primary font-medium">国家矿山安全监察局</p>
+                            <p class="text-xs text-text-muted">官方通报 · 原文发布</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-xs"></i>
+                </a>
+                <a href="https://www.chinacoal.org.cn/" target="_blank" class="flex items-center justify-between p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                            <i class="fa-solid fa-newspaper text-deep-blue text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-text-primary font-medium">中国煤炭报</p>
+                            <p class="text-xs text-text-muted">媒体报道 · 事故详情</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-xs"></i>
+                </a>
+                <a href="https://www.mem.gov.cn/" target="_blank" class="flex items-center justify-between p-3 bg-slate-50 rounded-xl cursor-pointer hover:bg-slate-100 transition-colors">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                            <i class="fa-solid fa-file-lines text-safety-orange text-sm"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-text-primary font-medium">应急管理部</p>
+                            <p class="text-xs text-text-muted">政策文件 · 整改要求</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-xs"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- 正文内容 -->
+        <article class="prose prose-slate max-w-none">
+            <div class="text-text-secondary leading-relaxed space-y-4 text-sm">
+                <p>
+                    <strong class="text-text-primary">国家矿山安全监察局山西局3月18日消息</strong>，当日14时23分，山西省某煤矿井下运输巷道发生瓦斯超限事故，瓦斯浓度最高达2.5%，超过《煤矿安全规程》规定的1.0%报警限值。
+                </p>
+                
+                <p>
+                    经初步调查，事故原因为局部通风机停运导致工作面瓦斯积聚。事故发生时，井下共有作业人员127人，均已安全升井，未造成人员伤亡。
+                </p>
+
+                <h3 class="text-base font-bold text-text-primary mt-6 mb-3 flex items-center">
+                    <span class="w-1 h-5 bg-alert-red rounded mr-2"></span>
+                    一、事故详情
+                </h3>
+
+                <p>
+                    据通报显示，该煤矿为年产120万吨的核定生产能力矿井，属高瓦斯矿井。事故发生在二水平运输巷道掘进工作面。
+                </p>
+
+                <h3 class="text-base font-bold text-text-primary mt-6 mb-3 flex items-center">
+                    <span class="w-1 h-5 bg-alert-red rounded mr-2"></span>
+                    二、原因分析
+                </h3>
+
+                <div class="bg-red-50 rounded-xl p-4 border border-red-100 my-4">
+                    <ul class="list-disc list-inside space-y-2 text-text-secondary">
+                        <li><strong class="text-text-primary">局部通风机故障：</strong>电机故障导致停运</li>
+                        <li><strong class="text-text-primary">备用风机未及时切换：</strong>切换装置存在故障</li>
+                        <li><strong class="text-text-primary">瓦斯监测响应滞后：</strong>未能及时发现异常</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-base font-bold text-text-primary mt-6 mb-3 flex items-center">
+                    <span class="w-1 h-5 bg-alert-red rounded mr-2"></span>
+                    三、监管要求
+                </h3>
+
+                <div class="bg-deep-blue/5 rounded-xl p-4 border border-deep-blue/10 my-4">
+                    <p class="text-text-secondary">
+                        <i class="fa-solid fa-quote-left text-deep-blue mr-2"></i>
+                        一、立即开展瓦斯治理专项检查；<br><br>
+                        二、强化"双风机、双电源"系统维护；<br><br>
+                        三、完善瓦斯超限应急处置预案。
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- 相关案例 -->
+        <div class="mt-6">
+            <h3 class="font-bold text-base mb-3 flex items-center text-text-primary">
+                <i class="fa-solid fa-link text-alert-red mr-2"></i>相关事故案例
+            </h3>
+            <div class="space-y-2">
+                <div class="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm cursor-pointer hover:bg-slate-50">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center">
+                            <i class="fa-solid fa-triangle-exclamation text-alert-red text-sm"></i>
+                        </div>
+                        <span class="text-sm text-text-secondary">2024年贵州某矿瓦斯突出事故</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-text-muted text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- 相关政策 -->
+        <div class="mt-6">
+            <h3 class="font-bold text-base mb-3 flex items-center text-text-primary">
+                <i class="fa-solid fa-gavel text-deep-blue mr-2"></i>相关政策文件
+            </h3>
+            <div class="space-y-2">
+                <a href="#" class="source-link flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm cursor-pointer">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                            <i class="fa-solid fa-file-pdf text-deep-blue text-sm"></i>
+                        </div>
+                        <span class="text-sm text-text-secondary">《煤矿安全规程》（2022版）</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-xs"></i>
+                </a>
+                <a href="#" class="source-link flex items-center justify-between p-3 bg-white rounded-xl border border-slate-100 shadow-sm cursor-pointer">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center">
+                            <i class="fa-solid fa-file-lines text-emerald-500 text-sm"></i>
+                        </div>
+                        <span class="text-sm text-text-secondary">《防治煤与瓦斯突出细则》</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部操作栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-200/50 z-40">
+        <div class="flex items-center justify-around py-3 px-4">
+            <button class="action-btn flex flex-col items-center space-y-1" id="like-btn">
+                <i class="fa-regular fa-thumbs-up text-lg text-text-muted"></i>
+                <span class="text-xs text-text-muted">点赞</span>
+            </button>
+            <button class="action-btn flex flex-col items-center space-y-1">
+                <i class="fa-regular fa-comment text-lg text-text-muted"></i>
+                <span class="text-xs text-text-muted">评论</span>
+            </button>
+            <button class="action-btn flex flex-col items-center space-y-1" id="collect-btn">
+                <i class="fa-regular fa-star text-lg text-text-muted"></i>
+                <span class="text-xs text-text-muted">收藏</span>
+            </button>
+            <button class="flex items-center space-x-2 px-4 py-2 ai-glow rounded-xl">
+                <i class="fa-solid fa-robot text-white"></i>
+                <span class="text-sm text-white font-medium">问AI</span>
+            </button>
+            <button class="flex items-center space-x-2 px-4 py-2 expert-glow rounded-xl">
+                <i class="fa-solid fa-user-tie text-white"></i>
+                <span class="text-sm text-white font-medium">问专家</span>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        const bookmarkBtn = document.getElementById('bookmark-btn');
+        const collectBtn = document.getElementById('collect-btn');
+        let isBookmarked = false;
+
+        function toggleBookmark() {
+            isBookmarked = !isBookmarked;
+            if (isBookmarked) {
+                bookmarkBtn.innerHTML = '<i class="fa-solid fa-bookmark text-sm text-safety-orange"></i>';
+                collectBtn.innerHTML = '<i class="fa-solid fa-star text-lg text-safety-orange"></i><span class="text-xs text-safety-orange">已收藏</span>';
+            } else {
+                bookmarkBtn.innerHTML = '<i class="fa-regular fa-bookmark text-sm text-text-secondary"></i>';
+                collectBtn.innerHTML = '<i class="fa-regular fa-star text-lg text-text-muted"></i><span class="text-xs text-text-muted">收藏</span>';
+            }
+        }
+
+        bookmarkBtn.addEventListener('click', toggleBookmark);
+        collectBtn.addEventListener('click', toggleBookmark);
+
+        const likeBtn = document.getElementById('like-btn');
+        let isLiked = false;
+        likeBtn.addEventListener('click', function() {
+            isLiked = !isLiked;
+            if (isLiked) {
+                this.innerHTML = '<i class="fa-solid fa-thumbs-up text-lg text-safety-orange"></i><span class="text-xs text-safety-orange">已赞</span>';
+            } else {
+                this.innerHTML = '<i class="fa-regular fa-thumbs-up text-lg text-text-muted"></i><span class="text-xs text-text-muted">点赞</span>';
+            }
+        });
+    </script>
+</body>
+</html>

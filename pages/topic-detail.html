@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>专题详情 - 煤矿安全风向标</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#1e3a5f',
+                        'deep-blue-light': '#2d5a87',
+                        'safety-orange': '#f97316',
+                        'alert-red': '#dc2626',
+                        'bg-primary': '#f8fafc',
+                        'bg-secondary': '#f1f5f9',
+                        'text-primary': '#1e293b',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94a3b8',
+                    },
+                    fontFamily: {
+                        'sans': ['Noto Sans SC', 'PingFang SC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif; background-color: #f8fafc; }
+        .article-item { transition: background-color 0.2s ease; }
+        .article-item:active { background-color: #f1f5f9; }
+        .filter-chip { transition: all 0.2s ease; }
+        .filter-chip:active { transform: scale(0.95); }
+        ::-webkit-scrollbar { width: 0; display: none; }
+        /* 毛玻璃效果 */
+        .glass-effect { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        /* AI光晕 */
+        .ai-glow { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); box-shadow: 0 0 16px rgba(59, 130, 246, 0.4); }
+    </style>
+</head>
+<body class="bg-bg-primary text-text-primary">
+    <!-- 顶部导航 -->
+    <header class="sticky top-0 z-50 glass-effect border-b border-slate-200/50">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button onclick="history.back()" class="flex items-center space-x-2 text-text-secondary hover:text-deep-blue transition-colors">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="text-sm">返回</span>
+            </button>
+            <h1 class="text-base font-bold text-text-primary">专题详情</h1>
+            <button class="action-btn w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center" id="favorite-btn">
+                <i class="fa-regular fa-bookmark text-sm text-text-secondary"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 内容区域 -->
+    <main class="px-4 py-4 pb-28 overflow-y-auto">
+        <!-- 专题信息卡片 -->
+        <div class="bg-white rounded-2xl p-5 mb-4 border border-slate-100 shadow-sm">
+            <div class="flex items-start space-x-4 mb-4">
+                <div class="w-14 h-14 rounded-2xl ai-glow flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-book-open text-white text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-lg font-bold mb-1 text-text-primary">煤矿安全生产标准化新标准解读</h1>
+                    <p class="text-sm text-text-secondary leading-relaxed">多部委联合发布新修订的煤矿安全生产标准化管理体系考核定级办法，全面解读政策变化与合规要点</p>
+                </div>
+            </div>
+
+            <!-- 统计数据 -->
+            <div class="flex items-center justify-around py-3 bg-slate-50 rounded-xl mb-4">
+                <div class="text-center">
+                    <p class="text-lg font-bold text-deep-blue">28</p>
+                    <p class="text-xs text-text-muted">篇解读</p>
+                </div>
+                <div class="w-px h-8 bg-slate-200"></div>
+                <div class="text-center">
+                    <p class="text-lg font-bold text-deep-blue">8.5k</p>
+                    <p class="text-xs text-text-muted">阅读</p>
+                </div>
+                <div class="w-px h-8 bg-slate-200"></div>
+                <div class="text-center">
+                    <p class="text-lg font-bold text-deep-blue">126</p>
+                    <p class="text-xs text-text-muted">收藏</p>
+                </div>
+                <div class="w-px h-8 bg-slate-200"></div>
+                <div class="text-center">
+                    <p class="text-xs px-2 py-1 bg-emerald-100 text-emerald-600 rounded-full">持续更新</p>
+                </div>
+            </div>
+
+            <!-- 学习进度 -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm text-text-secondary">我的学习进度</span>
+                    <span class="text-sm text-deep-blue font-bold">35%</span>
+                </div>
+                <div class="h-2 bg-slate-100 rounded-full overflow-hidden">
+                    <div class="h-full bg-deep-blue rounded-full transition-all duration-500" style="width: 35%"></div>
+                </div>
+                <p class="text-xs text-text-muted mt-2">已读 10/28 篇 · 剩余约45分钟完成</p>
+            </div>
+        </div>
+
+        <!-- 筛选标签 -->
+        <div class="flex space-x-2 mb-4 overflow-x-auto pb-2">
+            <button class="filter-chip px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap bg-deep-blue text-white shadow-sm" data-filter="all">
+                全部 <span class="ml-1 text-white/70">28</span>
+            </button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm whitespace-nowrap bg-white text-text-secondary border border-slate-200 shadow-sm" data-filter="policy">
+                政策文件 <span class="ml-1 text-text-muted">6</span>
+            </button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm whitespace-nowrap bg-white text-text-secondary border border-slate-200 shadow-sm" data-filter="analysis">
+                解读分析 <span class="ml-1 text-text-muted">12</span>
+            </button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm whitespace-nowrap bg-white text-text-secondary border border-slate-200 shadow-sm" data-filter="case">
+                案例研究 <span class="ml-1 text-text-muted">6</span>
+            </button>
+            <button class="filter-chip px-4 py-2 rounded-full text-sm whitespace-nowrap bg-white text-text-secondary border border-slate-200 shadow-sm" data-filter="guide">
+                技术指南 <span class="ml-1 text-text-muted">4</span>
+            </button>
+        </div>
+
+        <!-- 文章列表 -->
+        <div class="space-y-3">
+            <!-- 置顶文章 -->
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-2 py-0.5 bg-safety-orange/10 text-safety-orange text-xs rounded font-medium">
+                        <i class="fa-solid fa-thumbtack mr-1"></i>置顶
+                    </span>
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs rounded">政策文件</span>
+                </div>
+                <h3 class="font-bold text-sm mb-2 text-text-primary">《煤矿安全生产标准化管理体系考核定级办法（试行）》</h3>
+                <p class="text-xs text-text-muted">2026-03-15 · 国家煤矿安全监察局</p>
+            </div>
+
+            <!-- 已读文章 -->
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-600 text-xs rounded">解读分析</span>
+                    <span class="text-xs text-deep-blue"><i class="fa-solid fa-check-circle mr-1"></i>已读</span>
+                </div>
+                <h3 class="font-medium text-sm mb-2 text-text-primary">新标准五大变化要点速览</h3>
+                <p class="text-xs text-text-muted">2026-03-14 · 中国煤炭工业协会</p>
+            </div>
+
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="px-2 py-0.5 bg-purple-100 text-purple-600 text-xs rounded">案例研究</span>
+                    <span class="text-xs text-deep-blue"><i class="fa-solid fa-check-circle mr-1"></i>已读</span>
+                </div>
+                <h3 class="font-medium text-sm mb-2 text-text-primary">某煤业集团标准化建设经验分享</h3>
+                <p class="text-xs text-text-muted">2026-03-13 · 安全管理部</p>
+            </div>
+
+            <!-- 未读文章 -->
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-2 py-0.5 bg-amber-100 text-amber-600 text-xs rounded">技术指南</span>
+                </div>
+                <h3 class="font-medium text-sm mb-2 text-text-primary">风险分级管控实操手册（2026版）</h3>
+                <p class="text-xs text-text-muted">2026-03-12 · 技术研究院</p>
+            </div>
+
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-2 py-0.5 bg-emerald-100 text-emerald-600 text-xs rounded">解读分析</span>
+                </div>
+                <h3 class="font-medium text-sm mb-2 text-text-primary">动态达标考核机制详解</h3>
+                <p class="text-xs text-text-muted">2026-03-11 · 政策研究组</p>
+            </div>
+
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-2 py-0.5 bg-blue-100 text-blue-600 text-xs rounded">政策文件</span>
+                </div>
+                <h3 class="font-medium text-sm mb-2 text-text-primary">煤矿安全风险分级管控实施细则</h3>
+                <p class="text-xs text-text-muted">2026-03-10 · 应急管理部</p>
+            </div>
+
+            <div class="article-item bg-white rounded-2xl p-4 border border-slate-100 shadow-sm cursor-pointer" onclick="window.location.href='news-detail.html'">
+                <div class="flex items-center space-x-2 mb-2">
+                    <span class="px-2 py-0.5 bg-purple-100 text-purple-600 text-xs rounded">案例研究</span>
+                </div>
+                <h3 class="font-medium text-sm mb-2 text-text-primary">智能化矿井标准化实践案例</h3>
+                <p class="text-xs text-text-muted">2026-03-09 · 中国煤炭报</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部操作栏 -->
+    <footer class="fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-200/50 z-40">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button class="flex items-center space-x-2 px-4 py-2.5 bg-slate-100 rounded-xl text-text-secondary hover:bg-slate-200 transition-colors" id="collect-btn">
+                <i class="fa-regular fa-star"></i>
+                <span class="text-sm">收藏专题</span>
+            </button>
+            <button class="flex items-center space-x-2 px-6 py-2.5 ai-glow rounded-xl text-white shadow-lg">
+                <i class="fa-solid fa-robot"></i>
+                <span class="text-sm font-medium">AI解读专题</span>
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // 收藏功能
+        const favoriteBtn = document.getElementById('favorite-btn');
+        const collectBtn = document.getElementById('collect-btn');
+        let isFavorited = false;
+
+        function toggleFavorite() {
+            isFavorited = !isFavorited;
+            if (isFavorited) {
+                favoriteBtn.innerHTML = '<i class="fa-solid fa-bookmark text-sm text-safety-orange"></i>';
+                collectBtn.innerHTML = '<i class="fa-solid fa-star text-safety-orange"></i><span class="text-sm text-safety-orange">已收藏</span>';
+                collectBtn.classList.remove('bg-slate-100', 'text-text-secondary');
+                collectBtn.classList.add('bg-safety-orange/10');
+            } else {
+                favoriteBtn.innerHTML = '<i class="fa-regular fa-bookmark text-sm text-text-secondary"></i>';
+                collectBtn.innerHTML = '<i class="fa-regular fa-star"></i><span class="text-sm">收藏专题</span>';
+                collectBtn.classList.add('bg-slate-100', 'text-text-secondary');
+                collectBtn.classList.remove('bg-safety-orange/10');
+            }
+        }
+
+        favoriteBtn.addEventListener('click', toggleFavorite);
+        collectBtn.addEventListener('click', toggleFavorite);
+
+        // 筛选功能
+        const filterChips = document.querySelectorAll('.filter-chip');
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => {
+                    c.classList.remove('bg-deep-blue', 'text-white', 'shadow-sm');
+                    c.classList.add('bg-white', 'text-text-secondary', 'border', 'border-slate-200');
+                });
+                this.classList.remove('bg-white', 'text-text-secondary', 'border', 'border-slate-200');
+                this.classList.add('bg-deep-blue', 'text-white', 'shadow-sm');
+            });
+        });
+    </script>
+</body>
+</html>

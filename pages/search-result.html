@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>煤矿安全助手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#1e3a5f',
+                        'deep-blue-light': '#2d5a87',
+                        'safety-orange': '#f97316',
+                        'bg-primary': '#f8fafc',
+                        'text-primary': '#1e293b',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94a3b8',
+                    },
+                    fontFamily: {
+                        'sans': ['Noto Sans SC', 'PingFang SC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif; background-color: #f8fafc; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .ai-glow { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.3); }
+        
+        /* 打字动画 */
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        .typing-cursor::after { content: '▋'; animation: blink 1s infinite; color: #1e3a5f; margin-left: 2px; }
+        
+        /* 消息动画 */
+        .message-enter { animation: fadeInUp 0.3s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 思考动画 */
+        .thinking-dots span { animation: thinking 1.4s infinite; }
+        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes thinking { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+        
+        /* 语音按钮动画 */
+        .voice-btn.recording { 
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%); 
+            animation: pulse-voice 1.5s infinite; 
+        }
+        @keyframes pulse-voice { 
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 
+        }
+    </style>
+</head>
+<body class="bg-bg-primary text-text-primary">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-slate-200/50" style="height: 56px;">
+        <div class="flex items-center h-full px-4 space-x-3">
+            <button onclick="history.back()" class="text-text-secondary hover:text-deep-blue transition-colors">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <div class="flex-1 flex items-center space-x-2">
+                <div class="w-7 h-7 rounded-lg ai-glow flex items-center justify-center">
+                    <i class="fa-solid fa-brain text-white text-sm"></i>
+                </div>
+                <span class="text-sm font-medium text-deep-blue">煤矿安全助手</span>
+            </div>
+            <button class="action-btn w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors" id="new-chat-btn" title="新对话">
+                <i class="fa-solid fa-plus text-sm text-text-secondary"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 聊天区域 -->
+    <main id="chat-container" class="pt-16 pb-24 px-4 overflow-y-auto" style="height: 100vh;">
+        <div id="chat-messages" class="max-w-2xl mx-auto space-y-4">
+            <!-- 欢迎消息 -->
+            <div class="flex items-start space-x-3 message-enter">
+                <div class="w-8 h-8 rounded-xl ai-glow flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-robot text-white text-sm"></i>
+                </div>
+                <div class="flex-1 bg-white border border-slate-100 rounded-2xl rounded-tl-none p-4 shadow-sm">
+                    <p class="text-sm text-text-secondary leading-relaxed">
+                        您好！我是煤矿安全助手，基于煤矿安全规程知识库为您提供专业问答服务。请问有什么可以帮助您的？
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部输入框 -->
+    <div id="input-bar" class="fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-200/50 p-4">
+        <div class="max-w-2xl mx-auto flex items-center space-x-3">
+            <input type="text" 
+                   id="user-input" 
+                   placeholder="输入您的安全问题..." 
+                   class="flex-1 bg-slate-100 rounded-xl py-3 px-4 text-sm text-text-primary placeholder-text-muted outline-none focus:ring-2 focus:ring-deep-blue/20 transition-all"
+                   autocomplete="off">
+            <button id="send-btn" class="w-12 h-12 ai-glow rounded-xl flex items-center justify-center hover:shadow-lg transition-all disabled:opacity-50">
+                <i class="fa-solid fa-paper-plane text-white"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ========== Dify API 配置 ==========
+        const DIFY_CONFIG = {
+            apiUrl: 'https://api.dify.ai/v1/chat-messages',
+            apiKey: 'app-xO3rCck2wdH1sEowvLSOGYOU',
+            user: 'user-' + Math.random().toString(36).substr(2, 9),
+        };
+
+        // ========== 状态管理 ==========
+        let conversationId = '';
+        let isLoading = false;
+
+        // ========== DOM 元素 ==========
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const newChatBtn = document.getElementById('new-chat-btn');
+
+        // ========== 添加消息 ==========
+        function addMessage(content, isUser = false, isThinking = false) {
+            const messageDiv = document.createElement('div');
+            
+            if (isUser) {
+                // 用户消息靠右：气泡 + 头像
+                messageDiv.className = 'flex items-start space-x-3 message-enter justify-end';
+                messageDiv.innerHTML = `
+                    <div class="bg-deep-blue rounded-2xl rounded-tr-none p-4 max-w-[75%]">
+                        <p class="text-sm text-white whitespace-pre-wrap break-words">${escapeHtml(content)}</p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-deep-blue flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-user text-white text-sm"></i>
+                    </div>
+                `;
+            } else {
+                // AI 消息靠左：头像 + 气泡
+                messageDiv.className = 'flex items-start space-x-3 message-enter';
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 rounded-xl ai-glow flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-white border border-slate-100 rounded-2xl rounded-tl-none p-4 shadow-sm flex-1 max-w-[85%]">
+                        <p class="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap break-words ${isThinking ? 'thinking-dots' : ''}">${isThinking ? '<span>.</span><span>.</span><span>.</span>' : formatAnswer(content)}</p>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            return messageDiv;
+        }
+
+        // ========== 格式化答案 ==========
+        function formatAnswer(text) {
+            if (!text) return '';
+            // 去除开头和结尾的空白
+            text = text.trim();
+            // 将连续多个换行符替换为单个换行
+            text = text.replace(/\n{2,}/g, '\n');
+            return escapeHtml(text)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>')
+                .replace(/• /g, '• ');
+        }
+
+        // ========== HTML 转义 ==========
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ========== 滚动到底部 ==========
+        function scrollToBottom() {
+            const container = document.getElementById('chat-container');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // ========== 调用 Dify API（Streaming 模式）==========
+        async function callDifyAPI(query) {
+            try {
+                const response = await fetch(DIFY_CONFIG.apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${DIFY_CONFIG.apiKey}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        inputs: {},
+                        query: query,
+                        response_mode: 'streaming',  // Agent 类型必须使用 streaming 模式
+                        conversation_id: conversationId,
+                        user: DIFY_CONFIG.user,
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error:', response.status, errorText);
+                    throw new Error(`请求失败 (${response.status}): ${errorText}`);
+                }
+
+                // 处理 SSE 流式响应
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let result = { answer: '', conversation_id: '' };
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                if (data.event === 'message' || data.event === 'agent_message') {
+                                    result.answer += data.answer || '';
+                                }
+                                if (data.conversation_id) {
+                                    result.conversation_id = data.conversation_id;
+                                }
+                            } catch (e) {
+                                // 忽略解析错误
+                            }
+                        }
+                    }
+                }
+
+                if (result.conversation_id) {
+                    conversationId = result.conversation_id;
+                }
+
+                return result;
+            } catch (error) {
+                console.error('Dify API 调用失败:', error);
+                throw error;
+            }
+        }
+
+        // ========== 发送消息 ==========
+        async function sendMessage() {
+            const query = userInput.value.trim();
+            if (!query || isLoading) return;
+
+            // 添加用户消息
+            addMessage(query, true);
+            userInput.value = '';
+            
+            // 显示思考中
+            isLoading = true;
+            sendBtn.disabled = true;
+            const thinkingMsg = addMessage('', false, true);
+
+            try {
+                const result = await callDifyAPI(query);
+                
+                // 移除思考中消息
+                thinkingMsg.remove();
+                
+                // 添加 AI 回复
+                if (result.answer) {
+                    addMessage(result.answer, false);
+                } else {
+                    addMessage('抱歉，我暂时无法回答这个问题，请稍后再试。', false);
+                }
+            } catch (error) {
+                thinkingMsg.remove();
+                // 显示详细错误信息
+                let errorMsg = '网络连接失败';
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMsg = '无法连接到服务器，可能是网络限制或跨域问题。\n建议：\n1. 使用 VPN 访问\n2. 或联系管理员配置后端代理';
+                } else if (error.message.includes('401')) {
+                    errorMsg = 'API Key 无效，请联系管理员';
+                } else if (error.message.includes('403')) {
+                    errorMsg = '访问被拒绝，请检查 API 权限';
+                }
+                addMessage(errorMsg, false);
+            } finally {
+                isLoading = false;
+                sendBtn.disabled = false;
+                // 不自动聚焦输入框，避免弹出键盘
+            }
+        }
+
+        // ========== 事件监听 ==========
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // ========== 新对话 ==========
+        newChatBtn.addEventListener('click', () => {
+            conversationId = '';
+            chatMessages.innerHTML = '';
+            // 重新添加欢迎消息
+            addMessage('您好！我是煤矿安全助手，基于煤矿安全规程知识库为您提供专业问答服务。请问有什么可以帮助您的？', false);
+        });
+
+        // ========== 页面初始化 ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查 URL 参数是否有初始问题
+            const urlParams = new URLSearchParams(window.location.search);
+            const initialQuery = urlParams.get('q');
+            
+            if (initialQuery && initialQuery.trim()) {
+                userInput.value = initialQuery;
+                setTimeout(() => sendMessage(), 500);
+            }
+            // 不自动聚焦，等待用户点击输入框
+        });
+    </script>
+</body>
+</html>

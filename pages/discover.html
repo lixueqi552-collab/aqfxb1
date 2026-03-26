@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>发现 - 煤矿安全风向标</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-blue': '#1e3a5f',
+                        'deep-blue-light': '#2d5a87',
+                        'safety-orange': '#f97316',
+                        'alert-red': '#dc2626',
+                        'trend-green': '#059669',
+                        'bg-primary': '#f8fafc',
+                        'text-primary': '#1e293b',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94a3b8',
+                    },
+                    fontFamily: { 'sans': ['Noto Sans SC', 'PingFang SC', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; font-family: 'Noto Sans SC', 'PingFang SC', -apple-system, sans-serif; background-color: #f8fafc; }
+        .topic-card { transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+        .topic-card:active { transform: scale(0.98); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .tab-indicator { transition: left 0.3s ease, width 0.3s ease; }
+        .glass-effect { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        ::-webkit-scrollbar { width: 0; display: none; }
+    </style>
+</head>
+<body class="bg-bg-primary text-text-primary">
+    <!-- 顶部标题 -->
+    <header class="sticky top-0 z-40 glass-effect border-b border-slate-200/50">
+        <div class="flex items-center justify-between px-4 py-3">
+            <h1 class="text-lg font-bold text-deep-blue">【深度】行业专家解读</h1>
+            <button class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                <i class="fa-solid fa-magnifying-glass text-sm text-deep-blue"></i>
+            </button>
+        </div>
+
+        <!-- 分类标签 -->
+        <div class="relative px-4 pb-3">
+            <div class="flex space-x-6 relative">
+                <button class="tab-btn text-sm font-bold text-deep-blue relative z-10" data-tab="policy">
+                    政策专题
+                </button>
+                <button class="tab-btn text-sm font-medium text-text-muted relative z-10" data-tab="trend">
+                    趋势专题
+                </button>
+                <button class="tab-btn text-sm font-medium text-text-muted relative z-10" data-tab="professional">
+                    专业专题
+                </button>
+            </div>
+            <div class="tab-indicator absolute bottom-3 left-4 h-0.5 bg-deep-blue rounded-full" style="width: 56px; left: 4px;"></div>
+        </div>
+    </header>
+
+    <!-- 内容区域 -->
+    <main class="px-4 py-4 pb-20 overflow-y-auto h-[calc(100vh-100px)]">
+        <!-- 政策专题 -->
+        <div id="policy-tab" class="tab-content">
+            <p class="text-xs text-text-muted mb-3">
+                <i class="fa-solid fa-info-circle mr-1"></i>
+                最近高层动态中，重点内容的专题解读，AI辅助专家署名
+            </p>
+
+            <!-- 置顶专题 -->
+            <div class="topic-card relative rounded-2xl overflow-hidden mb-4 h-40 cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                <div class="absolute inset-0 bg-gradient-to-r from-deep-blue to-deep-blue-light"></div>
+                <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><pattern id=%22grain%22 width=%2210%22 height=%2210%22 patternUnits=%22userSpaceOnUse%22><circle cx=%225%22 cy=%225%22 r=%220.5%22 fill=%22white%22 opacity=%220.1%22/></pattern></defs><rect width=%22100%22 height=%22100%22 fill=%22url(%23grain)%22/></svg>');"></div>
+                <div class="relative h-full p-4 flex flex-col justify-between">
+                    <div>
+                        <span class="px-2 py-0.5 bg-white/20 text-white text-xs rounded-full backdrop-blur-sm">
+                            <i class="fa-solid fa-fire mr-1"></i>热门专题
+                        </span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white mb-1">2026煤矿安全规程修订解读</h3>
+                        <p class="text-sm text-white/80">全面解读新版规程变化要点与合规指南</p>
+                        <div class="flex items-center space-x-3 mt-2 text-xs text-white/60">
+                            <span><i class="fa-solid fa-file-lines mr-1"></i>32篇解读</span>
+                            <span><i class="fa-solid fa-eye mr-1"></i>1.2万阅读</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 专题列表 -->
+            <div class="space-y-3">
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-blue-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-gas-pump text-blue-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h3 class="font-bold text-base text-text-primary">瓦斯治理专项专题</h3>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">瓦斯抽采、监测、利用全流程政策解读</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>中国矿大 王教授</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>28篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-purple-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-shield-halved text-purple-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h3 class="font-bold text-base text-text-primary">安全生产标准化专题</h3>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">达标创建、动态考核、持续改进指南</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>安全科学院 李研究员</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>36篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-amber-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-hard-hat text-amber-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h3 class="font-bold text-base text-text-primary">职业健康管理专题</h3>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">粉尘防治、噪声控制、职业体检政策</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>矿大医院 张主任</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>22篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 趋势专题 -->
+        <div id="trend-tab" class="tab-content hidden">
+            <p class="text-xs text-text-muted mb-3">
+                <i class="fa-solid fa-info-circle mr-1"></i>
+                安全管理动态趋势，重点解读
+            </p>
+
+            <div class="space-y-3">
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-emerald-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-robot text-emerald-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h3 class="font-bold text-base text-text-primary">智能化矿井建设专题</h3>
+                                <span class="px-1.5 py-0.5 bg-emerald-100 text-emerald-600 text-xs rounded">HOT</span>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">智能采煤、智能掘进、智能通风政策指引</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>中国矿大 张教授</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>45篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-cyan-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-leaf text-cyan-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h3 class="font-bold text-base text-text-primary">双碳目标与煤矿转型</h3>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">碳达峰碳中和背景下煤矿绿色发展路径</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>能源研究院 刘教授</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>20篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-teal-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-teal-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-microchip text-teal-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-1">
+                                <h3 class="font-bold text-base text-text-primary">5G+智慧矿山发展</h3>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">5G技术应用案例与政策支持分析</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>12篇</span>
+                                <span><i class="fa-solid fa-clock mr-1"></i>持续更新</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 专业专题 -->
+        <div id="professional-tab" class="tab-content hidden">
+            <p class="text-xs text-text-muted mb-3">
+                <i class="fa-solid fa-info-circle mr-1"></i>
+                安全管理专业类解读
+            </p>
+
+            <div class="space-y-3">
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-red-400 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-fire-extinguisher text-red-400 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-base mb-1 text-text-primary">防灭火技术专题</h3>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">矿井火灾预防、检测与应急处置技术</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>安全科学院 陈工程师</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>25篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-sky-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-wind text-sky-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-base mb-1 text-text-primary">通风系统优化专题</h3>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">通风系统设计、改造与能效提升技术</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-user-tie mr-1 text-safety-orange"></i>中国矿大 赵教授</span>
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>22篇</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-stone-400 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-stone-100 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-mountain text-stone-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-base mb-1 text-text-primary">顶板管理技术专题</h3>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">顶板灾害防治、支护技术、监测预警</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>30篇</span>
+                                <span><i class="fa-solid fa-clock mr-1"></i>持续更新</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+
+                <div class="topic-card bg-white rounded-2xl p-4 border-l-4 border-indigo-500 shadow-sm cursor-pointer" onclick="window.location.href='topic-detail.html'">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-water text-indigo-500 text-lg"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-bold text-base mb-1 text-text-primary">防治水专项专题</h3>
+                            <p class="text-sm text-text-secondary mb-2 line-clamp-1">水害防治、探放水、应急排水政策解读</p>
+                            <div class="flex items-center space-x-3 text-xs text-text-muted">
+                                <span><i class="fa-solid fa-file-alt mr-1"></i>18篇</span>
+                                <span><i class="fa-solid fa-clock mr-1"></i>持续更新</span>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-text-muted text-xs mt-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const indicator = document.querySelector('.tab-indicator');
+
+        tabBtns.forEach((btn, index) => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => {
+                    b.classList.remove('text-deep-blue', 'font-bold');
+                    b.classList.add('text-text-muted', 'font-medium');
+                });
+                this.classList.remove('text-text-muted', 'font-medium');
+                this.classList.add('text-deep-blue', 'font-bold');
+
+                const btnRect = this.getBoundingClientRect();
+                const containerRect = this.parentElement.getBoundingClientRect();
+                indicator.style.left = (btnRect.left - containerRect.left) + 'px';
+                indicator.style.width = btnRect.width + 'px';
+
+                const tabId = this.dataset.tab;
+                tabContents.forEach(content => content.classList.add('hidden'));
+                document.getElementById(`${tabId}-tab`).classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
